@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Pio Admin Test Suite]">
+  <listeners>
+    <listener class-name="weblib.PDFReporter"/>
+  </listeners>
+  <test name="Pio Admin Test(failed)">
+    <classes>
+      <class name="executor.AdminPio">
+        <methods>
+          <include name="Execute"/>
+          <include name="Setup"/>
+          <include name="closeBrowser"/>
+        </methods>
+      </class> <!-- executor.AdminPio -->
+    </classes>
+  </test> <!-- Pio Admin Test(failed) -->
+</suite> <!-- Failed suite [Pio Admin Test Suite] -->

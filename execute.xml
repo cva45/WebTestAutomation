@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Pio Admin Test Suite">
+<listeners>
+<listener class-name="weblib.PDFReporter"/>
+</listeners>
+<!-- Test -->
+<test name="Pio Admin Test" >
+<classes>
+<class name="executor.AdminPio"/>
+</classes>
+</test> 
+<!-- End Test -->
+</suite> <!-- Suite -->

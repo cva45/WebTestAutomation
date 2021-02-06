@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+    <line>
+      <![CDATA[Login Successfull]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/index.php# - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/logout.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/index.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/masterData.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/masterDataEditor.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/characteristics.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/chapters.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/topics.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/subtopics.php - OK--> Valid URL]]>
+    </line>
+    <line>
+      <![CDATA[https://test.piotest.com/masterData.php - OK--> Valid URL]]>
+    </line>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="15685" started-at="2019-05-10T03:06:08Z" finished-at="2019-05-10T03:06:24Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="15685" started-at="2019-05-10T03:06:08Z" finished-at="2019-05-10T03:06:24Z">
+      <class name="executor.AdminPio">
+        <test-method status="PASS" signature="Setup()[pri:0, instance:executor.AdminPio@cb5822]" name="Setup" is-config="true" duration-ms="9978" started-at="2019-05-10T08:35:58Z" finished-at="2019-05-10T08:36:08Z">
+          <reporter-output>
+            <line>
+              <![CDATA[Login Successfull]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- Setup -->
+        <test-method status="PASS" signature="Execute()[pri:0, instance:executor.AdminPio@cb5822]" test-instance-name="Verify Links in Admin Page" name="Execute" duration-ms="15673" started-at="2019-05-10T08:36:08Z" finished-at="2019-05-10T08:36:24Z">
+          <reporter-output>
+            <line>
+              <![CDATA[https://test.piotest.com/index.php# - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/logout.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/index.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/masterData.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/masterDataEditor.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/characteristics.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/chapters.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/topics.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/subtopics.php - OK--> Valid URL]]>
+            </line>
+            <line>
+              <![CDATA[https://test.piotest.com/masterData.php - OK--> Valid URL]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- Execute -->
+        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:executor.AdminPio@cb5822]" name="closeBrowser" is-config="true" duration-ms="332" started-at="2019-05-10T08:36:24Z" finished-at="2019-05-10T08:36:24Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeBrowser -->
+      </class> <!-- executor.AdminPio -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
