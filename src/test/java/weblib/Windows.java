@@ -7,35 +7,37 @@ import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import applib.GlobalVars;
+
 
 public class Windows 
 {
 	private static boolean bStatus;
 	private static Logger logger=Logger.getLogger(Windows.class.getName());
 
-	public static String getWindowTitle(WebDriver wDriver)
+	public static String getWindowTitle()
 	{
-		return wDriver.getTitle();
+		return GlobalVars.wdriver.getTitle();
 	}
 
-	public static String[] getWindowTitles(WebDriver wDriver)
+	public static String[] getWindowTitles()
 	{
-		Set<String> windows = wDriver.getWindowHandles();
+		Set<String> windows = GlobalVars.wdriver.getWindowHandles();
 		int iSize = windows.size();
 		String[] arrWindows = new String[iSize];
 		int iInc = 0;
 		for (String handle : windows) 
 		{
-			wDriver.switchTo().window(handle);
-			arrWindows[iInc] = wDriver.getTitle();
+			GlobalVars.wdriver.switchTo().window(handle);
+			arrWindows[iInc] = GlobalVars.wdriver.getTitle();
 			iInc++;
 		}
 		return arrWindows;
 	}
 
-	public static boolean switchToWindowByIndex(WebDriver wDriver,int iWindowIndex)
+	public static boolean switchToWindowByIndex(int iWindowIndex)
 	{
-		Set<String> windows=wDriver.getWindowHandles();
+		Set<String> windows=GlobalVars.wdriver.getWindowHandles();
 		Iterator itr=windows.iterator();
 		int iSize=windows.size();
 		if((iSize > 1))
@@ -49,7 +51,7 @@ public class Windows
 					arrWin[inc]=itr.next().toString();
 					inc++;
 				}
-				wDriver.switchTo().window(arrWin[iWindowIndex]);
+				GlobalVars.wdriver.switchTo().window(arrWin[iWindowIndex]);
 				return true;
 			}
 			Messages.errorMsg = iWindowIndex+" is greater than windows count "+iSize;
@@ -59,22 +61,22 @@ public class Windows
 		return false;
 	}
 
-	public static boolean switchToWindowByTitle(WebDriver wDriver,String sWindowName)
+	public static boolean switchToWindowByTitle(String sWindowName)
 	{
-		String sFocusedWindow = wDriver.getWindowHandle();
-		Set<String> windows = wDriver.getWindowHandles();
+		String sFocusedWindow = GlobalVars.wdriver.getWindowHandle();
+		Set<String> windows = GlobalVars.wdriver.getWindowHandles();
 		int iSize = windows.size();
 		if(iSize >1)
 		{
 			for (String handle : windows) 
 			{
-				wDriver.switchTo().window(handle);
-				if(wDriver.getTitle().equalsIgnoreCase(sWindowName))
+				GlobalVars.wdriver.switchTo().window(handle);
+				if(GlobalVars.wdriver.getTitle().equalsIgnoreCase(sWindowName))
 				{
 					return true;
 				}
 			}
-			wDriver.switchTo().window(sFocusedWindow);
+			GlobalVars.wdriver.switchTo().window(sFocusedWindow);
 			Messages.errorMsg = sWindowName+" not found";
 			return false;
 		}
@@ -82,26 +84,26 @@ public class Windows
 		return false;
 	}
 
-	public static boolean switchToFrameByFrameElement(WebDriver wDriver,By objLocator)
+	public static boolean switchToFrameByFrameElement(By objLocator)
 	{
-		bStatus = Verify.verifyElementVisible(wDriver,objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{	
-			wDriver.switchTo().frame(wDriver.findElement(objLocator));
+			GlobalVars.wdriver.switchTo().frame(GlobalVars.wdriver.findElement(objLocator));
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean switchToFrameByName(WebDriver wDriver,String sName)
+	public static boolean switchToFrameByName(String sName)
 	{
 		By objLocator = By.name(sName);
-		bStatus = Verify.verifyElementVisible(wDriver,objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{	
 			try
 			{
-				wDriver.switchTo().frame(sName);
+				GlobalVars.wdriver.switchTo().frame(sName);
 				return true;
 			}
 			catch(Exception e)
@@ -113,15 +115,15 @@ public class Windows
 		return false;
 	}
 	
-	public static boolean switchToFrameById(WebDriver wDriver,String sId)
+	public static boolean switchToFrameById(String sId)
 	{
 		By objLocator = By.id(sId);
-		bStatus = Verify.verifyElementVisible(wDriver,objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{	
 			try
 			{
-				wDriver.switchTo().frame(sId);
+				GlobalVars.wdriver.switchTo().frame(sId);
 				return true;
 			}
 			catch(Exception e)

@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import applib.*;
+
 public class Wait
 {
 
@@ -19,10 +21,10 @@ public class Wait
 	private static boolean bStatus;
 	private static Logger logger=Logger.getLogger(Wait.class.getName());
 
-	public static boolean waitForElementPresence(WebDriver wDriver,By objLocator,long iTimeout)
+	public static boolean waitForElementPresence(By objLocator,long iTimeout)
 	{
 		try{
-			wait = new WebDriverWait(wDriver,iTimeout);
+			wait = new WebDriverWait(GlobalVars.wdriver,iTimeout);
 			wait.until(ExpectedConditions.presenceOfElementLocated(objLocator));
 			logger.info("element "+objLocator+" is present after waiting.");
 			return true;
@@ -35,10 +37,10 @@ public class Wait
 		}
 	}
 
-	public static boolean waitForElementVisibility(WebDriver wDriver,By objLocator,long iTimeout)
+	public static boolean waitForElementVisibility(By objLocator,long iTimeout)
 	{
 		try{
-			wait = new WebDriverWait(wDriver,iTimeout);
+			wait = new WebDriverWait(GlobalVars.wdriver,iTimeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(objLocator));
 			logger.info("element "+objLocator+" is visible after waiting.");
 			return true;
@@ -51,13 +53,13 @@ public class Wait
 		}
 	}
 
-	public static boolean waitForTextVisible(WebDriver wDriver,String sText,long iTimeout)
+	public static boolean waitForTextVisible(String sText,long iTimeout)
 	{
 		long iTimeoutinMillis = (iTimeout*10);
 		long lFinalTime = System.currentTimeMillis() + iTimeoutinMillis;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
-			bStatus = Verify.verifyTextVisible(wDriver, sText);
+			bStatus = Verify.verifyTextVisible(sText);
 			if(bStatus)
 			{
 				logger.info("Text '"+sText+"' is present after waiting .");
@@ -69,13 +71,13 @@ public class Wait
 		return false; 
 	}
 	
-	public static boolean waitForTextVisible(WebDriver wDriver,By objLocator,String sText,long iTimeout)
+	public static boolean waitForTextVisible(By objLocator,String sText,long iTimeout)
 	{
 		long iTimeoutinMillis = (iTimeout*1000);
 		long lFinalTime = System.currentTimeMillis() + iTimeoutinMillis;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
-			bStatus = Verify.verifyTextVisible(wDriver,objLocator ,sText);
+			bStatus = Verify.verifyTextVisible(objLocator ,sText);
 			if(bStatus)
 			{
 				logger.info("Text '"+sText+"' is present after waiting .");
@@ -87,14 +89,14 @@ public class Wait
 		return false; 
 	}
 
-	public static boolean waitForAlert(WebDriver wDriver,long iTimeout) 
+	public static boolean waitForAlert(long iTimeout) 
 	{
 		long iTimeoutinMillis = (iTimeout*1000);
 		long lFinalTime = System.currentTimeMillis() + iTimeoutinMillis;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
 			try {
-				wDriver.switchTo().alert();
+				GlobalVars.wdriver.switchTo().alert();
 				logger.info("Alert present");
 				return true;
 			} catch (NoAlertPresentException e) {
@@ -106,10 +108,10 @@ public class Wait
 		return false;
 	}
 
-	/*	public static boolean waitForAjax(WebDriver wDriver,long iTimeout)
+	/*	public static boolean waitForAjax(long iTimeout)
 	{
 		long lFinalTime = System.currentTimeMillis() + iTimeout;
-		JavascriptExecutor jsDriver = (JavascriptExecutor)wDriver;
+		JavascriptExecutor jsDriver = (JavascriptExecutor)GlobalVars.wdriver;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
 			Object numberOfAjaxConnections = jsDriver.executeScript("return jQuery.active");
@@ -122,21 +124,21 @@ public class Wait
 
 	}*/
 
-	public static boolean waitForJQueryProcessing(WebDriver wDriver, long iTimeout)
+	public static boolean waitForJQueryProcessing( long iTimeout)
 	{
 		boolean jQcondition = false;
 		try{	
-			wait = new WebDriverWait(wDriver,iTimeout);
+			wait = new WebDriverWait(GlobalVars.wdriver,iTimeout);
 			wait.until(new ExpectedCondition<Boolean>() 
 					{
 				@Override
-				public Boolean apply(WebDriver wDriver) 
+				public Boolean apply(WebDriver driver) 
 				{
-					return (Boolean) ((JavascriptExecutor) wDriver).executeScript("return jQuery.active == 0");
+					return (Boolean) ((JavascriptExecutor) GlobalVars.wdriver).executeScript("return jQuery.active == 0");
 				}
 
 					});
-			jQcondition = (Boolean) ((JavascriptExecutor) wDriver).executeScript("return window.jQuery != undefined && jQuery.active === 0");
+			jQcondition = (Boolean) ((JavascriptExecutor) GlobalVars.wdriver).executeScript("return window.jQuery != undefined && jQuery.active === 0");
 			if(!jQcondition)
 			{
 				Messages.errorMsg = "couldn't wait for Ajax to load completely after waiting "+iTimeout+"Secs";
@@ -151,13 +153,13 @@ public class Wait
 		}
 	}
 	
-	public static boolean waitForEnable(WebDriver wDriver,By objLocator,long iTimeout)
+	public static boolean waitForEnable(By objLocator,long iTimeout)
 	{
 		long iTimeoutinMillis = (iTimeout*1000);
 		long lFinalTime = System.currentTimeMillis() + iTimeoutinMillis;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
-			bStatus = Verify.verifyEnable(wDriver, objLocator);
+			bStatus = Verify.verifyEnable(objLocator);
 			if(bStatus)
 			{
 				return true;
@@ -167,15 +169,15 @@ public class Wait
 		return false;
 	}
 
-	public static boolean waitForWindow(WebDriver wDriver,long iTimeout)
+	public static boolean waitForWindow(long iTimeout)
 	{
-		String sMainHandler = wDriver.getWindowHandle();
+		String sMainHandler = GlobalVars.wdriver.getWindowHandle();
 		System.out.println(sMainHandler);
 		long iTimeoutinMillis = (iTimeout*1000);
 		long lFinalTime = System.currentTimeMillis() + iTimeoutinMillis;
 		while(System.currentTimeMillis() < lFinalTime) 
 		{
-			Set<String> handlers = wDriver.getWindowHandles();
+			Set<String> handlers = GlobalVars.wdriver.getWindowHandles();
 			System.out.println("size of windows "+handlers);
 			Iterator<String> winIterator = handlers.iterator();
 			while (winIterator.hasNext())

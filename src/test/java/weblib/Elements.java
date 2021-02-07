@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import applib.GlobalVars;
+
 
 
 
@@ -16,25 +18,25 @@ public class Elements {
 	private static boolean bStatus;
 	private static Logger logger=Logger.getLogger(Elements.class.getName());
 
-	public static WebElement getWebElement(WebDriver wDriver, By objLocator)
+	public static WebElement getWebElement(By objLocator)
 	{
-		bStatus = Verify.verifyElementVisible(wDriver,objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
 			logger.info("The Element "+objLocator+" is visible and can be used");
-			return wDriver.findElement(objLocator);
+			return GlobalVars.wdriver.findElement(objLocator);
 		}
 		logger.warning("The Element "+objLocator+" is not visible and cannot be used");
 		return null;
 	}
 
-	public static int getXpathCount(WebDriver wDriver, By objLocator)
+	public static int getXpathCount(By objLocator)
 	{
 		int iSize = 0;
-		bStatus = Verify.verifyElementVisible(wDriver, objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
-			iSize = wDriver.findElements(objLocator).size();
+			iSize = GlobalVars.wdriver.findElements(objLocator).size();
 			logger.info("The xpath count of the element "+objLocator+" is "+iSize);
 			return iSize;
 		}
@@ -42,13 +44,13 @@ public class Elements {
 		return iSize;	
 	}
 
-	public static boolean enterText(WebDriver wDriver ,By objLocator,String sValue)
+	public static boolean enterText(By objLocator,String sValue)
 	{
-		bStatus = Verify.verifyElementVisible(wDriver, objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
-			wDriver.findElement(objLocator).clear();
-			wDriver.findElement(objLocator).sendKeys(sValue);
+			GlobalVars.wdriver.findElement(objLocator).clear();
+			GlobalVars.wdriver.findElement(objLocator).sendKeys(sValue);
 			logger.info("The text"+sValue+"has been inputted successfully.");
 			return true;
 		}
@@ -56,12 +58,12 @@ public class Elements {
 		return false;	
 	}
 
-	public static boolean selectCheckbox(WebDriver wDriver, By objLocator)
+	public static boolean selectCheckbox(By objLocator)
 	{
-			bStatus = Verify.verifyChecked(wDriver, objLocator);
+			bStatus = Verify.verifyChecked(objLocator);
 			if(!bStatus)
 			{
-				wDriver.findElement(objLocator).click();
+				GlobalVars.wdriver.findElement(objLocator).click();
 				
 				logger.info("The check box has been selected");
 				return true;
@@ -70,13 +72,13 @@ public class Elements {
 			return false;
 	}
 
-	public static boolean unSelectCheckbox(WebDriver wDriver, By objLocator)
+	public static boolean unSelectCheckbox(By objLocator)
 	{
 
-			bStatus = Verify.verifyChecked(wDriver, objLocator);
+			bStatus = Verify.verifyChecked(objLocator);
 			if(bStatus)
 			{
-				wDriver.findElement(objLocator).click();
+				GlobalVars.wdriver.findElement(objLocator).click();
 				logger.info("The check box has been deselected successfully");
 				return true;
 			}
@@ -84,12 +86,12 @@ public class Elements {
 			return false;
 	}
 
-	public static boolean clickButton(WebDriver wDriver, By objLocator)
+	public static boolean clickButton(By objLocator)
 	{
-		bStatus = Verify.verifyElementVisible(wDriver, objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
-			wDriver.findElement(objLocator).click();
+			GlobalVars.wdriver.findElement(objLocator).click();
 			logger.info("The button "+objLocator+" has been clicked successfully");
 			return true;
 		}
@@ -97,11 +99,11 @@ public class Elements {
 		return false;
 	}
 
-	public static boolean clearText(WebDriver wDriver,By objLocator){
-		bStatus = Verify.verifyElementVisible(wDriver, objLocator);
+	public static boolean clearText(By objLocator){
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
-			wDriver.findElement(objLocator).clear();
+			GlobalVars.wdriver.findElement(objLocator).clear();
 			logger.info("The text has been cleared from the input box "+objLocator+" successfully");
 			return true;
 		}
@@ -110,9 +112,9 @@ public class Elements {
 	}
 
 
-	public static boolean selectOptionByIndex(WebDriver wDriver,By objLocator, int iIndexVal)
+	public static boolean selectOptionByIndex(By objLocator, int iIndexVal)
 	{
-		WebElement wbElement = getWebElement(wDriver, objLocator);
+		WebElement wbElement = getWebElement(objLocator);
 		if(wbElement == null)
 		{
 			try{
@@ -131,9 +133,9 @@ public class Elements {
 		return false;
 	}
 
-	public static boolean selectOptionByValue(WebDriver wDriver,By objLocator,String sValue)
+	public static boolean selectOptionByValue(By objLocator,String sValue)
 	{
-		WebElement wbElement = getWebElement(wDriver, objLocator);
+		WebElement wbElement = getWebElement(objLocator);
 		if(wbElement == null)
 		{
 			try{
@@ -153,13 +155,13 @@ public class Elements {
 		return false;
 	}
 
-	public static String getElementAttribute(WebDriver wDriver,By objLocator, String sAttrVal)
+	public static String getElementAttribute(By objLocator, String sAttrVal)
 	{
 		String sValue = null;
-		bStatus = Verify.verifyElementPresent(wDriver, objLocator);
+		bStatus = Verify.verifyElementPresent(objLocator);
 		if(bStatus)
 		{
-			sValue = wDriver.findElement(objLocator).getAttribute(sAttrVal);
+			sValue = GlobalVars.wdriver.findElement(objLocator).getAttribute(sAttrVal);
 			if(sValue == null)
 			{
 				Messages.errorMsg = "The element "+objLocator+" has no attribute "+sAttrVal;
@@ -173,13 +175,13 @@ public class Elements {
 		return sValue ;
 	}
 	
-	public static String getText(WebDriver wDriver,By objLocator)
+	public static String getText(By objLocator)
 	{
 		String sValue = null;
-		bStatus = Verify.verifyElementVisible(wDriver,objLocator);
+		bStatus = Verify.verifyElementVisible(objLocator);
 		if(bStatus)
 		{
-			sValue = wDriver.findElement(objLocator).getText();
+			sValue = GlobalVars.wdriver.findElement(objLocator).getText();
 			if(sValue == null)
 			{
 				logger.info("The element "+objLocator+" has no text ");

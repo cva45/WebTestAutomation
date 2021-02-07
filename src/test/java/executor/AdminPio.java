@@ -17,7 +17,6 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import applib.AppLib;
-import applib.GloabalVars;
 import weblib.PDFReporter;
 import weblib.WebLib;
 
@@ -33,10 +32,9 @@ public class AdminPio implements ITest {
 	@BeforeSuite
 	public void Setup() {
 		AppLib app = new AppLib();
-		GloabalVars gv = new GloabalVars();
 		WebLib wl = new WebLib();
 
-		driver = wl.lunchBrowser(gv);
+//		driver = wl.lunchBrowser();
 		app.login("superadmin", "superadmin@123", driver);
 
 	}

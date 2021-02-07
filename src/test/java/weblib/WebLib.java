@@ -4,22 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import applib.GloabalVars;
 
 public class WebLib {
    
-	
-	public WebDriver lunchBrowser(GloabalVars gv) {
-		try {
-			System.setProperty("webdriver.chrome.driver",
-					"C:\\Users\\saribina\\Desktop\\NGA Project\\PioAdmin\\drivers\\chromedriver.exe");
-			gv.wdriver = new ChromeDriver();
-		} catch (Exception e) {
-			System.out.println("Exception in lunchBrowser:"+e.getMessage());
-		}
-		return gv.wdriver;
-	}
-	
+
 	public void inputText(String loc,String text,WebDriver driver) {
 		try {
 			driver.findElement(By.xpath(loc)).sendKeys(text);

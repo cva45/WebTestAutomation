@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriver;
 
+import applib.*;
+
 public class Alerts {
 
 	private static boolean bStatus;
@@ -16,13 +18,13 @@ public class Alerts {
 		logger.info("Alerts");
 	}
 
-	public static String getAlertMessage(WebDriver wDriver)
+	public static String getAlertMessage()
 	{
 		String alertMsg=null;
-		bStatus = Wait.waitForAlert(wDriver,5);
+		bStatus = Wait.waitForAlert(5);
 		if(bStatus)
 		{
-			alertMsg = wDriver.switchTo().alert().getText();
+			alertMsg = GlobalVars.wdriver.switchTo().alert().getText();
 			
 			
 			if(alertMsg != null)
@@ -40,12 +42,12 @@ public class Alerts {
 		return  alertMsg;
 	}
 
-	public static boolean acceptAlert(WebDriver wDriver)
+	public static boolean acceptAlert()
 	{
-		bStatus = Verify.verifyAlertPresent(wDriver);
+		bStatus = Verify.verifyAlertPresent();
 		if(bStatus)
 		{
-			wDriver.switchTo().alert().accept();
+			GlobalVars.wdriver.switchTo().alert().accept();
 			return true;
 		}
 		logger.warning("The alert could not be consumed successfully because "+Messages.errorMsg);
@@ -53,12 +55,12 @@ public class Alerts {
 
 	}
 
-	public static boolean closeAlert(WebDriver wDriver)
+	public static boolean closeAlert()
 	{
-		bStatus = Verify.verifyAlertPresent(wDriver);
+		bStatus = Verify.verifyAlertPresent();
 		if(bStatus)
 		{
-			wDriver.switchTo().alert().dismiss();
+			GlobalVars.wdriver.switchTo().alert().dismiss();
 			logger.info("The alert has been dismissed successfully");
 			return true;
 		}

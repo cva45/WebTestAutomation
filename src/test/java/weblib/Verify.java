@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import applib.*;
 
 public class Verify {
 
@@ -17,11 +18,11 @@ public class Verify {
 	private static Logger logger=Logger.getLogger(Verify.class.getName());
 
 
-	public static boolean verifyElementVisible(WebDriver wDriver,By objLocator)
+	public static boolean verifyElementVisible(By objLocator)
 	{
 		try
 		{
-			bStatus = wDriver.findElement(objLocator).isDisplayed();
+			bStatus = GlobalVars.wdriver.findElement(objLocator).isDisplayed();
 			logger.info("Element "+objLocator+" is visible");
 			return bStatus;
 		}
@@ -33,11 +34,11 @@ public class Verify {
 		}
 	}
 
-	public static boolean verifyElementPresent(WebDriver wDriver,By objLocator)
+	public static boolean verifyElementPresent(By objLocator)
 	{
 		try
 		{
-			wDriver.findElement(objLocator);
+			GlobalVars.wdriver.findElement(objLocator);
 			logger.info("Element "+objLocator+" is present in DOM");
 			return true;
 		}
@@ -49,10 +50,10 @@ public class Verify {
 		}
 	}
 
-	public static boolean verifyTextVisible(WebDriver wDriver,String sText)
+	public static boolean verifyTextVisible(String sText)
 	{
 
-		bStatus = wDriver.getPageSource().contains(sText);
+		bStatus = GlobalVars.wdriver.getPageSource().contains(sText);
 		if(bStatus)
 		{
 			logger.info("The Text "+sText+" is present in the current page ");
@@ -66,15 +67,15 @@ public class Verify {
 		}
 	}
 
-	public static boolean verifyTextVisible(WebDriver wDriver, By objLocator, String sText)
+	public static boolean verifyTextVisible(By objLocator, String sText)
 	{
-		bStatus = verifyElementVisible(wDriver, objLocator);
+		bStatus = verifyElementVisible(objLocator);
 		if(!bStatus)
 		{
 			logger.warning("The Text "+sText+" is not present in the element "+objLocator+" because "+Messages.errorMsg);
 			return false;
 		}
-		bStatus = wDriver.findElement(objLocator).getText().contains(sText);
+		bStatus = GlobalVars.wdriver.findElement(objLocator).getText().contains(sText);
 		if(bStatus)
 		{
 			logger.info("The Text "+sText+" is present in the element "+objLocator+" because "+Messages.errorMsg);
@@ -85,15 +86,15 @@ public class Verify {
 		return false;
 	}
 
-	public static boolean verifyChecked(WebDriver wDriver,By objLocator)
+	public static boolean verifyChecked(By objLocator)
 	{
-		bStatus = verifyElementVisible(wDriver, objLocator);
+		bStatus = verifyElementVisible(objLocator);
 		if(!bStatus)
 		{
 			logger.warning("The check box has cannot be checked because "+Messages.errorMsg);
 			return false;
 		}
-		bStatus = wDriver.findElement(objLocator).isSelected();
+		bStatus = GlobalVars.wdriver.findElement(objLocator).isSelected();
 		if(bStatus)
 		{
 			logger.info("The check box has already been selected");
@@ -118,9 +119,9 @@ public class Verify {
 		return false;
 	}
 
-	public static boolean verifyItemPresent(WebDriver wDriver,By objLocator,String sItem)
+	public static boolean verifyItemPresent(By objLocator,String sItem)
 	{
-		bStatus = verifyElementVisible(wDriver, objLocator);
+		bStatus = verifyElementVisible(objLocator);
 		if(!bStatus)
 		{
 			logger.warning(sItem+" cannot be verified for the locator "+objLocator+" because "+Messages.errorMsg);
@@ -129,7 +130,7 @@ public class Verify {
 
 		try
 		{
-			Select select = new Select(Elements.getWebElement(wDriver,objLocator));
+			Select select = new Select(Elements.getWebElement(objLocator));
 			List<WebElement> element = select.getOptions();
 			for (int iCount = 0; iCount < element.size(); iCount++) 
 			{
@@ -151,15 +152,15 @@ public class Verify {
 		}
 	}
 
-	public static boolean verifyEnable(WebDriver wDriver,By objLocator)
+	public static boolean verifyEnable(By objLocator)
 	{
-		bStatus = verifyElementPresent(wDriver, objLocator);
+		bStatus = verifyElementPresent(objLocator);
 		if(!bStatus)
 		{
 			logger.warning("Element "+objLocator+" is not visible "+Messages.errorMsg);
 			return false;
 		}
-		bStatus = wDriver.findElement(objLocator).isEnabled();
+		bStatus = GlobalVars.wdriver.findElement(objLocator).isEnabled();
 		if(bStatus)
 		{
 			logger.info("The element is enabled");
@@ -170,9 +171,9 @@ public class Verify {
 		return false;
 	}
 
-	public static boolean verifyAlertPresent(WebDriver wDriver)
+	public static boolean verifyAlertPresent()
 	{
-		String alertMsg = Alerts.getAlertMessage(wDriver);
+		String alertMsg = Alerts.getAlertMessage();
 		if(alertMsg == null)
 		{
 			logger.warning("No alert found");
@@ -182,11 +183,11 @@ public class Verify {
 		return true;
 	}
 
-	public static Boolean verifyElementsPresent(WebDriver wDriver, By objLocator) 
+	public static Boolean verifyElementsPresent(By objLocator) 
 	{
 		try 
 		{
-			wDriver.findElements(objLocator);
+			GlobalVars.wdriver.findElements(objLocator);
 			logger.info("The elements are prsent in the DOM");
 			return true;
 		} catch (NoSuchElementException e) 

@@ -1,5 +1,6 @@
 package weblib;
 
+import java.io.File;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -7,14 +8,18 @@ import org.apache.bcel.generic.RETURN;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import applib.GloabalVars;
-
-
+import applib.GlobalVars;
+import utillib.ReportLib;
+import applib.CoreLib;
 
 public class Browser 
 {
@@ -22,28 +27,41 @@ public class Browser
 	static WebDriver driver = null;
 	private static Logger logger=Logger.getLogger(Browser.class.getName());
 
-	public static WebDriver openBrowser(String sURL)
-	{
-		logger.info("The application has been invoked successfully in Mozilla Firefox with URL:"+sURL);
-		return driver = openFirefoxBrowser(driver,sURL);
-	}
+	public static WebDriver launchBrowser(String browserType) throws Exception {
+		// ReportLib.reportMsgInfo("Browser Type ::" + browserType + "'");
+		try {
+			if (GlobalVars.wdriver == null) {
+				switch (browserType) {
+				case "FF":
+					openFirefoxBrowser();
+					break;
+				case "GC": {
+					openChromeBrowser();
+					break;
+				}
+				case "IE": {
+					openIEBrowser();
+					break;
+				}
+				case "Html Unit": {
+					GlobalVars.wdriver = new HtmlUnitDriver();
+					break;
+				}
+				case "SF": {
+					GlobalVars.wdriver = new SafariDriver();
+					break;
+				}
+				}
+//				ReportLib.reportMsgInfo("'" + browserType + "' Browser Lanched Successfully ");
+				GlobalVars.wdriver.manage().window().maximize();
+				return GlobalVars.wdriver;
+			} else
+				return GlobalVars.wdriver;
+		} catch (Exception e) {
+//			ReportLib.LOGGER.error("Error occured while lanching the Browser ::'" + browserType + "'" + e.getMessage());
+			return null;
+		}
 
-	public static WebDriver openBrowser(String sBrowserName,String sURL,String sPathOfDriver){
-		driver = null;
-		if(sBrowserName.equalsIgnoreCase("ie")){
-			logger.info("The application has been invoked successfully in Internet Explorer with URL:"+sURL);
-			return driver = openIEBrowser(driver, sURL, sPathOfDriver);
-		}else if(sBrowserName.equalsIgnoreCase("chrome")){
-			logger.info("The application has been invoked successfully in Google Chrome with URL:"+sURL);
-			return driver = openChromeBrowser(driver, sURL, sPathOfDriver);
-		}else if(sBrowserName.equalsIgnoreCase("firefox")){
-			logger.info("The application has been invoked successfully in firefox with URL:"+sURL);
-			return driver = openFirefoxBrowser(driver, sURL);
-		}else {
-			Messages.errorMsg="No browser drivers found";
-			logger.warning("The application could not be invoked due to "+Messages.errorMsg);
-			return driver;
-		}	
 	}
 
 	/*****************************************************************************
@@ -60,21 +78,24 @@ public class Browser
 	Remarks                         :
 	 ******************************************************************************/
 
-	private static WebDriver openFirefoxBrowser(WebDriver wDriver, String surl)
+	private static void openFirefoxBrowser()
 	{	
-		if(wDriver==null)
-		{
-			try{
-				wDriver = new FirefoxDriver();
-				wDriver.get(surl);
-				wDriver.manage().window().maximize();	
-			}
-			catch(Exception e)
-			{
-				Messages.errorMsg = e.getMessage();
-			}
-		}
-		return wDriver;
+		System.setProperty("webdriver.firefox.profile", "MySeleniumProfile");
+		FirefoxProfile profile = new FirefoxProfile();
+		DesiredCapabilities dc = DesiredCapabilities.firefox();
+		profile.setPreference("intl.accept_languages", "en-gb");
+		profile.setPreference("browser.download.folderList", 2);
+		profile.setPreference("browser.download.dir",GlobalVars.downloadPath);
+		profile.setPreference("browser.download.manager.alertOnEXEOpen", false);
+		profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
+				"application/msword, application/csv, application/ris, text/csv, "
+						+ "image/png, application/pdf, text/html, text/plain, application/zip, application/x-zip, "
+						+ "application/x-zip-compressed, application/download, application/octet-stream");
+		dc.setCapability(FirefoxDriver.PROFILE, profile);
+
+		GlobalVars.wdriver = new FirefoxDriver(dc);
+		// ReportLib.reportMsgInfo("Browser Launched Successfully - Browser Type "
+		// + browserType);
 	}
 
 
@@ -92,23 +113,9 @@ public class Browser
 	Remarks                         :
 	 ******************************************************************************/
 
-	private static WebDriver openChromeBrowser(WebDriver wDriver,String sUrl,String sPathOfDriver )
+	private static void openChromeBrowser()
 	{
 
-		if(wDriver==null)
-		{
-			try{
-				System.setProperty("webdriver.chrome.driver",sPathOfDriver);
-				wDriver = new ChromeDriver();	
-				wDriver.get(sUrl);
-				wDriver.manage().window().maximize();	
-			}
-			catch(Exception e)
-			{
-				Messages.errorMsg = e.getMessage();
-			}
-		}
-		return wDriver;
 
 	}
 
@@ -126,24 +133,9 @@ public class Browser
 	Remarks                         :
 	 ******************************************************************************/
 
-	private static WebDriver openIEBrowser(WebDriver wDriver, String sUrl,String sPathOfdriver)
+	private static void openIEBrowser()
 	{
-		try{
-			System.setProperty("webdriver.ie.driver",sPathOfdriver);
-			DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
-			//dc.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
-			dc.setCapability("nativeEvents", false);
-			wDriver = new InternetExplorerDriver(dc);
-			wDriver.manage().deleteAllCookies();
-			wDriver.get(sUrl);
-			wDriver.manage().window().maximize();
-			//wDriver.
-		}
-		catch(Exception e)
-		{
-			Messages.errorMsg = e.getMessage();
-		}
-		return wDriver;
+
 	}
 
 
@@ -160,29 +152,31 @@ public class Browser
 	Modified On						:
 	Remarks                         :
  ******************************************************************************/
-public static boolean closeAllBrowsers(WebDriver wDriver)
-{
-
-	try{
-		if(wDriver != null)
-		{
-			GloabalVars.wdriver.quit();	
-			GloabalVars.wdriver = null;
-			//Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
-			//Runtime.getRuntime().exec("taskkill /F /IM IEDriverServer.exe");
-			logger.info("Closed all open browsers and killing the driver instances successfully");
-			return true;
+public static void closeBrowser() throws Exception {
+	try {
+		Thread.sleep(500);
+		CoreLib.takeScreenShot(GlobalVars.ResultsDir, "BeforeBrowserClose");
+		GlobalVars.wdriver.close();
+		Thread.sleep(1000);
+		ReportLib.reportMsgInfo("Closed Browser");
+		GlobalVars.wdriver.quit();
+		ReportLib.reportMsgInfo("Browser quit successful");
+	} catch (Exception e) {
+		try {
+			ReportLib.reportMsgInfo("Exception when trying to close browser. So trying to quit browser. \n Exception is : "
+					+ e.getMessage(), "");
+			GlobalVars.wdriver.quit();
+			ReportLib.reportMsgInfo("Browser quit successful");
+		} catch (Exception e1) {
+			ReportLib
+					.reportMsgInfo("Exception when trying to quit browser. So trying to Kill browser process. \n Exception is : "
+							+ e1.getMessage());
+			CoreLib.killBrowserProcess(GlobalVars.hMapVariableData.get("Browsertype"));
+			Asserts.assertFail("BeforeKillBrowser");
 		}
-		logger.warning("The browsers could not be closed");
-		return false;
-
-	}
-	catch(Exception e){
-		Messages.errorMsg = e.getMessage();
-		logger.warning("The browsers could not be closed because "+Messages.errorMsg);
-		return false;
 	}
 }
+
 
 public static boolean closeCurrentBrowser(WebDriver wDriver)
 {
